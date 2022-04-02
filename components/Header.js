@@ -13,6 +13,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atoms/modalAtom";
+import Link from "next/link";
 
 const Header = () => {
   const { data: session } = useSession();
@@ -21,7 +22,7 @@ const Header = () => {
 
   return (
     <div className="shadow-sm border-b bg-white sticky top-0 z-50">
-      <div className="flex justify-between max-w-6xl mx-5 md:mx-auto">
+      <div className="flex justify-between max-w-4xl mx-5 md:mx-auto">
         <div
           onClick={() => router.push("/")}
           className="relative inline-grid w-24 cursor-pointer"
@@ -47,7 +48,7 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-end space-x-4">
+        <div className="flex items-center justify-end space-x-5">
           <HomeIcon onClick={() => router.push("/")} className="navBtn" />
           <MenuIcon className="w-8 h-8 md:hidden cursor-pointer" />
           {session ? (
@@ -64,12 +65,23 @@ const Header = () => {
               />
               <GlobeIcon className="navBtn" />
               <HeartIcon className="navBtn" />
-              <img
-                onClick={signOut}
-                src={session.user.image}
-                alt="profile pic"
-                className="h-10 w-10 rounded-full cursor-pointer"
-              />
+              <Link
+                href={{
+                  pathname: "/profile",
+                  query: { id: "profile" },
+                }}
+                passHref
+              >
+                <a>
+                  <Image
+                    src={session.user.image}
+                    alt="profile pic"
+                    className="rounded-full cursor-pointer"
+                    width="30"
+                    height="30"
+                  />
+                </a>
+              </Link>
             </>
           ) : (
             <button onClick={signIn}>Sign in</button>

@@ -4,6 +4,8 @@ import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import Feed from "../components/Feed";
 import Modal from "../components/Modal";
+import Profile from "./profile";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -17,6 +19,7 @@ export default function Home() {
       <Header />
       <Feed />
       <Modal />
+      
     </div>
   );
 }
