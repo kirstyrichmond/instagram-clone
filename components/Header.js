@@ -21,7 +21,7 @@ const Header = () => {
   const router = useRouter();
 
   return (
-    <div className="shadow-sm border-b bg-white sticky top-0 z-50">
+    <div className="shadow-sm border-b bg-white sticky top-0 z-40">
       <div className="flex justify-between max-w-4xl mx-5 md:mx-auto">
         <div
           onClick={() => router.push("/")}

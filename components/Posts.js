@@ -7,10 +7,13 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { postCountState } from "../atoms/postCountAtom";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import { modalState } from "../atoms/modalAtom";
+import { selectedPostState } from "../atoms/selectedPostAtom";
 
 const Posts = () => {
   const [userPosts, setUserPosts] = useState([]);
   const setProfilePosts = useSetRecoilState(postCountState);
+  const setSelectedPost = useSetRecoilState(selectedPostState);
   const router = useRouter();
   const { data: session } = useSession();
   const {
@@ -36,7 +39,8 @@ const Posts = () => {
         return (
           <div
             key={post.id}
-            className="p-2 px-2 relative w-[33%] h-[100%] overflow-hidden "
+            className="mx-1 my-2 w-[30%] hover:bg-gray-500"
+            onClick={() => setSelectedPost(post.data())}
           >
             <Image
               src={post.data().image}
@@ -45,7 +49,7 @@ const Posts = () => {
               height={100}
               layout="responsive"
               objectFit="cover"
-              className=""
+              className="hover:opacity-60"
             />
           </div>
         );
@@ -64,6 +68,7 @@ const Posts = () => {
         img={post.data().image}
         caption={post.data().caption}
         className="p-5"
+        onClick={() => post.data().image}
       />
     </div>
   ));
