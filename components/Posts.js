@@ -34,7 +34,10 @@ const Posts = () => {
     .map((post) => {
       if (session?.user?.username === post.data().username) {
         return (
-          <div key={post.id} className="p-2 px-2 relative w-[33%] h-[100%] overflow-hidden ">
+          <div
+            key={post.id}
+            className="p-2 px-2 relative w-[33%] h-[100%] overflow-hidden "
+          >
             <Image
               src={post.data().image}
               alt=""
@@ -65,7 +68,7 @@ const Posts = () => {
     </div>
   ));
 
-  return id === "profile" ? (
+  return id === session?.user.username ? (
     <div className="flex justify-between flex-wrap px-2">{profilePosts}</div>
   ) : (
     <div>{feedPosts}</div>

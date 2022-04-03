@@ -68,7 +68,7 @@ const Header = () => {
               <Link
                 href={{
                   pathname: "/profile",
-                  query: { id: "profile" },
+                  query: { id: `${session?.user.username}` },
                 }}
                 passHref
               >
