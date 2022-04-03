@@ -30,23 +30,27 @@ const Posts = () => {
     [db]
   );
 
-   const profilePosts = userPosts.map((post) => {
-    if (session?.user?.username === post.data().username) {
-      return (
-        <div key={post.id} className="flex">
-          <Image
-            src={post.data().image}
-            alt=""
-            width="250%"
-            height="250%"
-            className=""
-          />
-        </div>
-      )
-    }
-  }).filter((e) => e !== undefined)
+  const profilePosts = userPosts
+    .map((post) => {
+      if (session?.user?.username === post.data().username) {
+        return (
+          <div key={post.id} className="p-2 px-2 relative w-[33%] h-[100%] overflow-hidden ">
+            <Image
+              src={post.data().image}
+              alt=""
+              width={100}
+              height={100}
+              layout="responsive"
+              objectFit="cover"
+              className=""
+            />
+          </div>
+        );
+      }
+    })
+    .filter((e) => e !== undefined);
 
-  setProfilePosts(profilePosts.length)
+  setProfilePosts(profilePosts.length);
 
   const feedPosts = userPosts.map((post) => (
     <div key={post.id} className="p-5">
@@ -61,12 +65,8 @@ const Posts = () => {
     </div>
   ));
 
-
-  console.log(profilePosts.length, "<< post count from length");
-  console.log(feedPosts.length, "<< feed count");
-
   return id === "profile" ? (
-    <div className="flex space-x-5 flex-wrap">{profilePosts}</div>
+    <div className="flex justify-between flex-wrap px-2">{profilePosts}</div>
   ) : (
     <div>{feedPosts}</div>
   );

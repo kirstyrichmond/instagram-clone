@@ -15,14 +15,15 @@ const Profile = () => {
       <Header />
       <main className="grid grid-cols-1 md:max-w-3xl xl:max-w-4xl mx-auto my-8">
         <section className="grid grid-cols-3 h-80">
-          <div className="col-span-1">
-            <Image
-              src={session?.user.image}
-              alt="profile pic"
-              className="rounded-full cursor-pointer flex justify-center"
-              width="150"
-              height="150"
-            />
+          <div className="col-span-1 lg:w-48 lg:h-48 md:w-40 md:h-40 sm:w-28 sm:h-28 w-24 h-24 relative mx-auto">
+            {session && (
+              <Image
+                src={session?.user.image}
+                alt="profile pic"
+                className="rounded-full cursor-pointer w-[100%]"
+                layout="fill"
+              />
+            )}
           </div>
           <div className="col-span-2">
             <h2 className="text-2xl font-light mb-5">
