@@ -85,11 +85,11 @@ const Post = ({ id, username, userImg, img, caption }) => {
   };
 
   return router.pathname === "/" ? (
-    <div className={`bg-white my-7 border rounded-sm`}>
+    <div className={`bg-white lg:my-7 border rounded-sm`}>
       {/* Header */}
       <div className="flex items-center p-5">
         <img
-          className="rounded-full h-12 w-12 border p-1 mr-3 object-contain"
+          className="object-contain w-12 h-12 p-1 mr-3 border rounded-full"
           src={userImg}
           alt=""
         />
@@ -107,7 +107,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
             {hasLiked ? (
               <HeartIconFilled
                 onClick={likePost}
-                className="btn text-red-500"
+                className="text-red-500 btn"
               />
             ) : (
               <HeartIcon onClick={likePost} className="btn" />
@@ -122,25 +122,25 @@ const Post = ({ id, username, userImg, img, caption }) => {
       {/* Caption */}
       <div className="p-5 truncate">
         {likes.length > 0 && (
-          <p className="font-bold mb-1">{likes.length} likes</p>
+          <p className="mb-1 font-bold">{likes.length} likes</p>
         )}
-        <span className="font-bold mr-1">{username} </span>
+        <span className="mr-1 font-bold">{username} </span>
         {caption}
       </div>
 
       {/* Comments */}
 
       {comments.length > 0 && (
-        <div className="ml-10 h-20 overflow-y-scroll scrollbar-thumb-black scrollbar-thin break-all">
+        <div className="h-20 ml-10 overflow-y-scroll break-all scrollbar-thumb-black scrollbar-thin">
           {comments.map((comment) => (
-            <div key={comment.id} className="flex items-center space-x-2 mb-3">
+            <div key={comment.id} className="flex items-center mb-3 space-x-2">
               <img
-                className="h-7 rounded-full"
+                className="rounded-full h-7"
                 src={comment.data().userImage}
                 alt=""
               />
-              <p className="text-sm flex-1">
-                <span className="font-bold pr-2">
+              <p className="flex-1 text-sm">
+                <span className="pr-2 font-bold">
                   {comment.data().username}
                 </span>
                 {comment.data().comment}
@@ -161,7 +161,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
             type="text"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="border-none flex-1 focus:ring-0 outline-none"
+            className="flex-1 border-none outline-none focus:ring-0"
             placeholder="Add a comment..."
           />
           <button
@@ -176,9 +176,9 @@ const Post = ({ id, username, userImg, img, caption }) => {
       )}
     </div>
   ) : (
-    <div className="bg-white">
-      <div className="flex ">
-        <div className="w-11/12 bg-black max-h-[900px] max-w-[900px]">
+    <div className="bg-white max-w-[100%] ">
+      <div className="flex flex-col md:flex-row max-w-[100%]">
+        <div className="w-full bg-black max-h-[900px] max-w-[850px]">
           <Image
             src={img}
             className="object-contain"
@@ -188,97 +188,105 @@ const Post = ({ id, username, userImg, img, caption }) => {
             alt=""
           />
         </div>
-        <div className="bg-white rounded-sm mt-5 w-[34%]">
-          <div className="flex items-center p-5 h-[10%] border-b-gray-200 border-b-2">
-            <img
-              className="rounded-full h-12 w-12 border p-1 mr-3 object-contain"
-              src={userImg}
-              alt=""
-            />
-            <p className="flex-1 font-bold">{username}</p>
-            <DotsHorizontalIcon className="h-5" />
+        <div className="">
+          <div className="bg-white rounded-sm w-[100%] md:w-[100%] h-fit my-auto">
+            <div className="flex items-center p-2 border-b-2 border-b-gray-200">
+              <img
+                className="object-contain p-1 mr-3 border rounded-full h-9 w-9"
+                src={userImg}
+                alt=""
+              />
+              <p className="flex-1 text-xs font-semibold">{username}</p>
+              <DotsHorizontalIcon className="h-5" />
+            </div>
           </div>
 
-          <div className="h-[550px] pt-5">
-            {comments.length > 0 && (
-              <div className="pl-5 h-[100%] overflow-y-auto">
-                {comments.map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="flex flex-col w-[100%] space-x-2 mb-3 "
-                  >
-                    <div className="flex w-[100%]">
-                      <img
-                        className="h-7 w-7 rounded-full mr-3"
-                        src={comment.data().userImage}
-                        alt=""
-                      />
-                      <p className="text-xs break-all pr-5">
-                        <span className="font-semibold pr-2">
-                          {comment.data().username}
-                        </span>
-                        {comment.data().comment}
-                      </p>
-                    </div>
-                    <div className="pl-8">
-                      <Moment fromNow className="pr-5 text-xs text-gray-500">
-                        {comment.data().timestamp?.toDate()}
-                      </Moment>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="h-[100px] border-b-gray-200 border-t-2">
-            {session && (
-              <div className="flex justify-between px-4 pt-4 py-4">
-                <div className="flex space-x-4 ">
-                  {hasLiked ? (
-                    <HeartIconFilled
-                      onClick={likePost}
-                      className="btn text-red-500"
+          <div className="">
+            <div className="p-2 min-h-[100px] max-h-[200px] lg:min-h-[400px] xl:min-h-[600px] overflow-y-scroll">
+              {comments.map((comment) => (
+                <div
+                  key={comment.id}
+                  className="flex flex-col w-[100%] space-x-2 mb-3 "
+                >
+                  <div className="flex w-[100%]">
+                    <img
+                      className="w-5 h-5 mr-3 rounded-full"
+                      src={comment.data().userImage}
+                      alt=""
                     />
-                  ) : (
-                    <HeartIcon onClick={likePost} className="btn" />
-                  )}
-                  <ChatIcon className="btn" />
-                  <PaperAirplaneIcon className="btn" />
+                    <p className="pr-5 text-xs break-all">
+                      <span className="pr-2 font-semibold">
+                        {comment.data().username}
+                      </span>
+                      {comment.data().comment}
+                    </p>
+                  </div>
+                  <div className="pl-8">
+                    <Moment fromNow className="pr-5 text-xs text-gray-500">
+                      {comment.data().timestamp?.toDate()}
+                    </Moment>
+                  </div>
                 </div>
-                <BookmarkIcon className="btn" />
-              </div>
-            )}
-
-            <div className="p-5 pt-0 truncate text-xs break-all">
-              {likes.length > 0 && (
-                <p className="font-bold mb-1">{likes.length} likes</p>
-              )}
-              <span className="font-semibold mr-1 text-xs ">{username}</span>
-              {caption}
+              ))}
             </div>
 
-            {session && (
-              <div className="w-[100%]">
-                <form className="flex items-center flex-end p-4 h-[100px] border-b-gray-200 border-t-2">
-                  <EmojiHappyIcon className="h-7" />
-                  <input
-                    type="text"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    className="border-none flex-1 focus:ring-0 outline-none"
-                    placeholder="Add a comment..."
-                  />
-                  <button
-                    type="submit"
-                    disabled={!comment.trim()}
-                    onClick={sendComment}
-                    className="font-semibold text-blue-400"
-                  >
-                    Post
-                  </button>
-                </form>
+            <div className="p-2 text-xs break-all border-t-2 border-t-gray-200">
+              <span className="mr-1 text-xs font-semibold ">{username}</span>
+              {caption}
+              <div className="flex justify-between">
+                <p className="mt-5 font-bold">
+                  {likes ? likes.length : 0}{" "}
+                  {likes.length === 1 ? "like" : "likes"}
+                </p>
+                <p className="mt-5 font-bold">
+                  {comments.length}{" "}
+                  {comments.length === 1 ? "comment" : "comments"}
+                </p>
               </div>
-            )}
+            </div>
+
+            <div className="h-auto">
+              {session && (
+                <div className="flex justify-between p-2">
+                  <div className="flex space-x-4 ">
+                    {hasLiked ? (
+                      <HeartIconFilled
+                        onClick={likePost}
+                        className="text-red-500 btn"
+                      />
+                    ) : (
+                      <HeartIcon onClick={likePost} className="btn" />
+                    )}
+                    <ChatIcon className="btn" />
+                    <PaperAirplaneIcon className="btn" />
+                  </div>
+                  <BookmarkIcon className="btn" />
+                </div>
+              )}
+
+              {session && (
+                <div className="w-[100%] h-auto bottom-0">
+                  <form className="flex items-center flex-end p-2 max-h-[50px] border-b-gray-200 border-t-2">
+                    <EmojiHappyIcon className="h-7" />
+                    <input
+                      type="text"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      className="flex-1 border-none outline-none focus:ring-0"
+                      placeholder="Add a comment..."
+                    />
+                    <button
+                      type="submit"
+                      disabled={!comment.trim()}
+                      onClick={sendComment}
+                      className="font-semibold text-blue-400"
+                    >
+                      Post
+                    </button>
+                  </form>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
