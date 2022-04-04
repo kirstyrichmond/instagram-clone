@@ -40,7 +40,7 @@ const Posts = () => {
           <div
             key={post.id}
             className="mx-1 my-2 w-[30%] hover:bg-gray-500"
-            onClick={() => setSelectedPost(post.data())}
+            onClick={() => setSelectedPost(post)}
           >
             <Image
               src={post.data().image}

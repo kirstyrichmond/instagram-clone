@@ -38,12 +38,16 @@ const Modal = () => {
   const captionRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const selectedPost = useRecoilValue(selectedPostState);
+  const [selectedPost, setSelectedPost] = useRecoilState(selectedPostState);
   const router = useRouter();
   const [hasLiked, setHasLiked] = useState(false);
   const [likes, setLikes] = useState([]);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+
+  let __selectedPost = selectedPost
+
+  console.log(__selectedPost, "<< selected post in MODAL");
 
   const {
     query: { id },
@@ -252,9 +256,16 @@ const Modal = () => {
           >
             {id === session?.user.username ? (
               <div className=" bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-[75%] mx-auto ">
-                <div className="bg-white">
+                <Post
+                  id={__selectedPost?.id}
+                  username={__selectedPost?.data().username}
+                  userImg={__selectedPost?.data().profileImg}
+                  img={__selectedPost?.data().image}
+                  caption={__selectedPost?.data().caption}
+                />
+                {/* <div className="bg-white">
                   <div className="flex ">
-                    {/* Image */}
+                    
                     <div className="w-11/12 bg-black max-h-[900px] max-w-[900px]">
                       <Image
                         src={selectedPost?.image}
@@ -266,7 +277,6 @@ const Modal = () => {
                       />
                     </div>
                     <div className="bg-white rounded-sm mt-5 w-[34%]">
-                      {/* Header */}
                       <div className="flex items-center p-5 h-[10%]">
                         <img
                           className="rounded-full h-12 w-12 border p-1 mr-3 object-contain"
@@ -279,7 +289,6 @@ const Modal = () => {
                         <DotsHorizontalIcon className="h-5" />
                       </div>
 
-                      {/* Caption */}
                       <div className="p-5 pt-0 truncate text-xs">
                         {likes.length > 0 && (
                           <p className="font-bold mb-1">{likes.length} likes</p>
@@ -290,7 +299,6 @@ const Modal = () => {
                         {selectedPost?.caption}
                       </div>
 
-                      {/* Comments */}
                       <div className="h-[70%]">
                         {comments.length > 0 && (
                           <div className="ml-10 h-20 overflow-y-scroll scrollbar-thumb-black scrollbar-thin">
@@ -319,7 +327,6 @@ const Modal = () => {
                         )}
                       </div>
                       <div className="h-[25%]">
-                        {/* Buttons */}
                         {session && (
                           <div className="flex justify-between px-4 pt-4">
                             <div className="flex space-x-4 ">
@@ -338,7 +345,6 @@ const Modal = () => {
                           </div>
                         )}
 
-                        {/* Input box */}
                         {session && (
                           <form className="flex items-center flex-end p-4">
                             <EmojiHappyIcon className="h-7" />
@@ -363,6 +369,7 @@ const Modal = () => {
                     </div>
                   </div>
                 </div>
+              */}
               </div>
             ) : (
               <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
