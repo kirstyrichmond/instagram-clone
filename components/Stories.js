@@ -16,10 +16,8 @@ const Stories = () => {
   }, []);
 
   return (
-    <div className="flex space-x-2 p-6 overflow-x-scroll">
-      {session && (
-        <Story img={session.user.image} username={session.user.username} />
-      )}
+    <div className="flex p-6 space-x-2 overflow-x-scroll">
+      {session && <Story img={session.image} username={session.username} />}
       {suggestions.map((profile) => (
         <Story
           key={profile.id}

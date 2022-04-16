@@ -47,9 +47,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
   );
 
   useEffect(() => {
-    setHasLiked(
-      likes.findIndex((like) => like.id === session?.user?.uid) !== -1
-    );
+    setHasLiked(likes.findIndex((like) => like.id === session?.uid) !== -1);
   }, [likes]);
 
   useEffect(
@@ -62,11 +60,12 @@ const Post = ({ id, username, userImg, img, caption }) => {
 
   const likePost = async () => {
     if (hasLiked) {
-      await deleteDoc(doc(db, "posts", id, "likes", session.user.uid));
+      await deleteDoc(doc(db, "posts", id, "likes", session.username));
     } else {
-      await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
-        username: session.user.username,
+      await setDoc(doc(db, "posts", id, "likes", session.username), {
+        username: session.username,
       });
+      setHasLiked(true);
     }
   };
 
@@ -78,8 +77,8 @@ const Post = ({ id, username, userImg, img, caption }) => {
 
     await addDoc(collection(db, "posts", id, "comments"), {
       comment: commentToSend,
-      username: session.user.username,
-      userImage: session.user.image,
+      username: session.username,
+      userImage: session.image,
       timestamp: serverTimestamp(),
     });
   };

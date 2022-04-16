@@ -35,7 +35,7 @@ const Posts = () => {
 
   const profilePosts = userPosts
     .map((post) => {
-      if (session?.user?.username === post.data().username) {
+      if (session?.username === post.data().username) {
         return (
           <div
             key={post.id}
@@ -73,8 +73,8 @@ const Posts = () => {
     </div>
   ));
 
-  return id === session?.user.username ? (
-    <div className="flex justify-between flex-wrap px-2">{profilePosts}</div>
+  return id === session?.username ? (
+    <div className="flex flex-wrap justify-between px-2">{profilePosts}</div>
   ) : (
     <div>{feedPosts}</div>
   );

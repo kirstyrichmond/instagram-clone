@@ -21,7 +21,7 @@ const Header = () => {
   const router = useRouter();
 
   return (
-    <div className="shadow-sm border-b bg-white sticky top-0 z-40">
+    <div className="sticky top-0 z-40 bg-white border-b shadow-sm">
       <div className="flex justify-between max-w-4xl mx-5 md:mx-auto">
         <div
           onClick={() => router.push("/")}
@@ -36,12 +36,12 @@ const Header = () => {
         </div>
 
         <div className="max-w-xs">
-          <div className="relative mt-1 p-3 rounded-md">
-            <div className="absolute inset-y-0 pl-3 flex items-center pointer-events-none">
+          <div className="relative p-3 mt-1 rounded-md">
+            <div className="absolute inset-y-0 flex items-center pl-3 pointer-events-none">
               <SearchIcon className="w-5 h-5 text-gray-400" />
             </div>
             <input
-              className="bg-gray-100 block w-full pl-10 focus:ring-transparent focus:border-transparent border-transparent rounded-lg"
+              className="block w-full pl-10 bg-gray-100 border-transparent rounded-lg focus:ring-transparent focus:border-transparent"
               type="text"
               placeholder="Search"
             />
@@ -50,12 +50,12 @@ const Header = () => {
 
         <div className="flex items-center justify-end space-x-5">
           <HomeIcon onClick={() => router.push("/")} className="navBtn" />
-          <MenuIcon className="w-8 h-8 md:hidden cursor-pointer" />
+          <MenuIcon className="w-8 h-8 cursor-pointer md:hidden" />
           {session ? (
             <>
               <div className="relative">
-                <PaperAirplaneIcon className="navBtn rotate-45" />
-                <div className="absolute -top-1 -right-2 text-xs w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white">
+                <PaperAirplaneIcon className="rotate-45 navBtn" />
+                <div className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full -top-1 -right-2">
                   3
                 </div>
               </div>
@@ -68,13 +68,13 @@ const Header = () => {
               <Link
                 href={{
                   pathname: "/profile",
-                  query: { id: `${session?.user.username}` },
+                  query: { id: `${session.username}` },
                 }}
                 passHref
               >
                 <a>
                   <Image
-                    src={session.user.image}
+                    src={session.image}
                     alt="profile pic"
                     className="rounded-full cursor-pointer"
                     width="30"

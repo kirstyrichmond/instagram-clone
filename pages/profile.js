@@ -22,14 +22,14 @@ const Profile = () => {
   return (
     <div>
       <Header />
-      <main className="grid grid-cols-1 md:max-w-3xl xl:max-w-4xl mx-auto my-8">
-            <Modal />
+      <main className="grid grid-cols-1 mx-auto my-8 md:max-w-3xl xl:max-w-4xl">
+        <Modal />
         <section className="grid grid-cols-3 h-80">
-          <div className="col-span-1 lg:w-48 lg:h-48 md:w-40 md:h-40 sm:w-28 sm:h-28 w-24 h-24 relative mx-auto">
+          <div className="relative w-24 h-24 col-span-1 mx-auto lg:w-48 lg:h-48 md:w-40 md:h-40 sm:w-28 sm:h-28">
             {session && (
               <>
                 <Image
-                  src={session?.user.image}
+                  src={session.image}
                   alt="profile pic"
                   className="rounded-full cursor-pointer w-[100%]"
                   layout="fill"
@@ -38,16 +38,14 @@ const Profile = () => {
             )}
           </div>
           <div className="col-span-2">
-            <h2 className="text-2xl font-light mb-5">
-              {session?.user.username}
-            </h2>
+            <h2 className="mb-5 text-2xl font-light">{session?.username}</h2>
             <div>
               <p className="text-md">{postCount} posts</p>
             </div>
           </div>
         </section>
         <section className="">
-          <p className="text-md text-center pb-5">POSTS</p>
+          <p className="pb-5 text-center text-md">POSTS</p>
           <div className="" onClick={() => setOpen(!open)}>
             <Posts className="" />
           </div>

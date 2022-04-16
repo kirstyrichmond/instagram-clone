@@ -45,7 +45,7 @@ const Modal = () => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
 
-  let __selectedPost = selectedPost
+  let __selectedPost = selectedPost;
 
   console.log(__selectedPost, "<< selected post in MODAL");
 
@@ -54,18 +54,16 @@ const Modal = () => {
   } = router;
 
   useEffect(() => {
-    setHasLiked(
-      likes.findIndex((like) => like.id === session?.user?.uid) !== -1
-    );
+    setHasLiked(likes.findIndex((like) => like.id === session?.uid) !== -1);
   }, [likes]);
 
   console.log(likes, "<< likes");
 
   const likePost = async () => {
     if (hasLiked) {
-      await deleteDoc(doc(db, "posts", id, "likes", session.user.uid));
+      await deleteDoc(doc(db, "posts", id, "likes", session.uid));
     } else {
-      await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+      await setDoc(doc(db, "posts", id, "likes", session.uid), {
         username: session.user.username,
       });
     }
@@ -79,8 +77,8 @@ const Modal = () => {
 
     await addDoc(collection(db, "posts", id, "comments"), {
       comment: commentToSend,
-      username: session.user.username,
-      userImage: session.user.image,
+      username: session.username,
+      userImage: session.image,
       timestamp: serverTimestamp(),
     });
   };
@@ -91,9 +89,9 @@ const Modal = () => {
     setLoading(true);
 
     const docRef = await addDoc(collection(db, "posts"), {
-      username: session.user.username,
+      username: session.username,
       caption: captionRef.current.value,
-      profileImg: session.user.image,
+      profileImg: session.image,
       timestamp: serverTimestamp(),
     });
     console.log("New doc added with ID", docRef.id);
@@ -124,8 +122,6 @@ const Modal = () => {
       setSelectedFile(readerEvent.target.result);
     };
   };
-
-  
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -158,7 +154,7 @@ const Modal = () => {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            {id === session?.user.username ? (
+            {id === session?.username ? (
               <div className="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-[75%] mx-auto mb-[250px] md:mt-[30%] lg:mt-[10%] xl:my-[2%] xl:mr-[5%]">
                 <Post
                   id={__selectedPost?.id}
@@ -171,12 +167,31 @@ const Modal = () => {
             ) : (
               <div className="inline-block w-full max-w-sm my-8 overflow-hidden text-left align-middle transition-all transform bg-white rounded-lg shadow-xl lg:px-4 lg:pt-5 lg:pb-4 sm:p-6">
                 {selectedFile ? (
-                  <img
-                    src={selectedFile}
-                    onClick={() => setSelectedFile(null)}
-                    alt="preview selected image"
-                    className="object-contain w-full cursor-pointer"
-                  />
+                  <>
+                    <img
+                      src={selectedFile}
+                      onClick={() => setSelectedFile(null)}
+                      alt="preview selected image"
+                      className="object-contain w-full cursor-pointer"
+                    />
+                    <div className="mt-2">
+                      <input
+                        className="w-full text-center border-none focus:ring-0"
+                        ref={captionRef}
+                        placeholder="Please enter a caption..."
+                      />
+                    </div>
+                    <div className="mt-5 sm:mt-6">
+                      <button
+                        type="button"
+                        disabled={!selectedFile}
+                        onClick={uploadPost}
+                        className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-red-600 border border-transparent rounded-md show-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm disabled:bg-gray-300 disabled:cursor-not-allowed hover:disabled:bg-gray-300"
+                      >
+                        {loading ? "Uploading..." : "Upload post"}
+                      </button>
+                    </div>
+                  </>
                 ) : (
                   <>
                     <div
@@ -196,7 +211,6 @@ const Modal = () => {
                         >
                           Upload a photo
                         </Dialog.Title>
-
                         <div>
                           <input
                             ref={filePickerRef}
@@ -205,6 +219,7 @@ const Modal = () => {
                             onChange={addImageToPost}
                           />
                         </div>
+
                         <div className="mt-2">
                           <input
                             className="w-full text-center border-none focus:ring-0"

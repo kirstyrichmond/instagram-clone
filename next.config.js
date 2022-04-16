@@ -7,6 +7,7 @@ const nextConfig = {
       "scontent.fman4-1.fna.fbcdn.net",
       "lh3.googleusercontent.com",
       "firebasestorage.googleapis.com",
+      "villagesonmacarthur.com",
     ],
   },
 };
