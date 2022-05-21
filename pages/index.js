@@ -3,9 +3,36 @@ import Image from "next/image";
 import Header from "../components/Header";
 import Feed from "../components/Feed";
 import Modal from "../components/Modal";
-import React from "react";
+import React, { useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
+
+// const washingtonRef = doc(db, "cities", "DC");
+
+// // Set the "capital" field of the city 'DC'
+// await updateDoc(washingtonRef, {
+//   capital: true,
+// });
 
 export default function Home() {
+  const { data: user } = useSession();
+
+  console.log(user?.user.id, "<< logged in user");
+
+  if (user) {
+    const addUserID = doc(db, "users", user.user.id);
+
+    updateDoc(addUserID, {
+      following: 0,
+      followers: 0,
+      id: user.user.id,
+      image: user.user.image,
+      emailVerified: true,
+      username: user.user.username,
+    });
+  }
+
   return (
     <div className="">
       <Head>

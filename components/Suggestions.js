@@ -13,10 +13,10 @@ const Suggestions = () => {
   }, []);
 
   return (
-    <div className="mt-4 ml-10 max-w-xs">
-      <div className="flex justify-between text-sm mb-5">
+    <div className="max-w-xs mt-4 ml-10">
+      <div className="flex justify-between mb-5 text-sm">
         <h3 className="text-sm font-bold text-gray-400">Suggestions for you</h3>
-        <button className="text-gray-600 font-semibold">See All</button>
+        <button className="font-semibold text-gray-600">See All</button>
       </div>
       {suggestions.map((profile) => (
         <div
@@ -29,10 +29,12 @@ const Suggestions = () => {
             alt=""
           />
           <div className="flex-1 ml-4">
-            <h2 className="font-semibold text-sm">{profile.username}</h2>
-            <h3 className="text-gray-400 text-xs">Works at {profile.company.name}</h3>
+            <h2 className="text-sm font-semibold">{profile.username}</h2>
+            <h3 className="text-xs text-gray-400">
+              Works at {profile.company.name}
+            </h3>
           </div>
-          <button className="text-blue-400 text-xs font-bold">Follow</button>
+          <button className="text-xs font-bold text-blue-400">Follow</button>
         </div>
       ))}
     </div>

@@ -15,12 +15,10 @@ const Posts = () => {
   const setProfilePosts = useSetRecoilState(postCountState);
   const setSelectedPost = useSetRecoilState(selectedPostState);
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: user } = useSession();
   const {
     query: { id },
   } = router;
-
-  console.log(id, "<< path");
 
   useEffect(
     () =>
@@ -33,9 +31,24 @@ const Posts = () => {
     [db]
   );
 
+  // useEffect(() => {
+    if (user) {
+      // const getPostsByUsername = async () => {
+      //   const userRef = collection(db, "posts");
+      //   const q = query(userRef, where("username", "==", id));
+
+      //   const querySnapshot = await getDocs(q);
+      //   querySnapshot.forEach((doc) => {
+      //     setUserPage(doc.data());
+      //   });
+      // };
+      // getUserByUsername();
+    }
+  // }, []);
+
   const profilePosts = userPosts
     .map((post) => {
-      if (session?.username === post.data().username) {
+      if (user?.user.username === post.data().username) {
         return (
           <div
             key={post.id}
@@ -73,7 +86,7 @@ const Posts = () => {
     </div>
   ));
 
-  return id === session?.username ? (
+  return id === user?.user.username ? (
     <div className="flex flex-wrap justify-between px-2">{profilePosts}</div>
   ) : (
     <div>{feedPosts}</div>

@@ -89,12 +89,16 @@ export default NextAuth({
             "https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png");
 
       return {
-        name: user.name,
-        email: user.email,
-        username: user.username,
-        image: user.image,
+        user,
       };
     },
+    // async user({ session, token, user }) {
+    //   user.userId = user.id;
+
+    //   return {
+    //     id: user.userId,
+    //   };
+    // },
   },
   secret: process.env.SECRET,
 });

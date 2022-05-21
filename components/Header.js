@@ -68,13 +68,13 @@ const Header = () => {
               <Link
                 href={{
                   pathname: "/profile",
-                  query: { id: `${session.username}` },
+                  query: { id: `${session.user.username}` },
                 }}
                 passHref
               >
                 <a>
                   <Image
-                    src={session.image}
+                    src={session.user.image}
                     alt="profile pic"
                     className="rounded-full cursor-pointer"
                     width="30"

@@ -25,9 +25,10 @@ import Moment from "react-moment";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useRecoilValue } from "recoil";
+import Link from "next/link";
 
 const Post = ({ id, username, userImg, img, caption }) => {
-  const { data: session } = useSession();
+  const { data: user } = useSession();
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
@@ -43,11 +44,11 @@ const Post = ({ id, username, userImg, img, caption }) => {
         ),
         (snapshot) => setComments(snapshot.docs)
       ),
-    [db, id]
+    // [db, id]
   );
 
   useEffect(() => {
-    setHasLiked(likes.findIndex((like) => like.id === session?.uid) !== -1);
+    setHasLiked(likes.findIndex((like) => like.id === user?.user.id) !== -1);
   }, [likes]);
 
   useEffect(
@@ -55,15 +56,15 @@ const Post = ({ id, username, userImg, img, caption }) => {
       onSnapshot(collection(db, "posts", id, "likes"), (snapshot) =>
         setLikes(snapshot.docs)
       ),
-    [db, id]
+    // [db, id]
   );
 
   const likePost = async () => {
     if (hasLiked) {
-      await deleteDoc(doc(db, "posts", id, "likes", session.username));
+      await deleteDoc(doc(db, "posts", id, "likes", user.user.username));
     } else {
-      await setDoc(doc(db, "posts", id, "likes", session.username), {
-        username: session.username,
+      await setDoc(doc(db, "posts", id, "likes", user.user.username), {
+        username: user.user.username,
       });
       setHasLiked(true);
     }
@@ -77,8 +78,8 @@ const Post = ({ id, username, userImg, img, caption }) => {
 
     await addDoc(collection(db, "posts", id, "comments"), {
       comment: commentToSend,
-      username: session.username,
-      userImage: session.image,
+      username: user.user.username,
+      userImage: user.user.image,
       timestamp: serverTimestamp(),
     });
   };
@@ -92,7 +93,9 @@ const Post = ({ id, username, userImg, img, caption }) => {
           src={userImg}
           alt=""
         />
-        <p className="flex-1 font-bold">{username}</p>
+        <Link href={`/profile?id=${username}`} passHref>
+          <p className="flex-1 font-bold cursor-pointer">{username}</p>
+        </Link>
         <DotsHorizontalIcon className="h-5" />
       </div>
 
@@ -100,7 +103,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
       <img src={img} className="object-cover w-full" alt="" />
 
       {/* Buttons */}
-      {session && (
+      {user && (
         <div className="flex justify-between px-4 pt-4">
           <div className="flex space-x-4">
             {hasLiked ? (
@@ -123,7 +126,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
         {likes.length > 0 && (
           <p className="mb-1 font-bold">{likes.length} likes</p>
         )}
-        <span className="mr-1 font-bold">{username} </span>
+        <span className="mr-1 font-bold">{user.user.username} </span>
         {caption}
       </div>
 
@@ -153,7 +156,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
       )}
 
       {/* Input box */}
-      {session && (
+      {user && (
         <form className="flex items-center p-4">
           <EmojiHappyIcon className="h-7" />
           <input
@@ -195,7 +198,9 @@ const Post = ({ id, username, userImg, img, caption }) => {
                 src={userImg}
                 alt=""
               />
-              <p className="flex-1 text-xs font-semibold">{username}</p>
+              <p className="flex-1 text-xs font-semibold">
+                {user?.user.username}
+              </p>
               <DotsHorizontalIcon className="h-5" />
             </div>
           </div>
@@ -230,7 +235,9 @@ const Post = ({ id, username, userImg, img, caption }) => {
             </div>
 
             <div className="p-2 text-xs break-all border-t-2 border-t-gray-200">
-              <span className="mr-1 text-xs font-semibold ">{username}</span>
+              <span className="mr-1 text-xs font-semibold ">
+                {user?.user.username}
+              </span>
               {caption}
               <div className="flex justify-between">
                 <p className="mt-5 font-bold">
@@ -245,7 +252,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
             </div>
 
             <div className="h-auto">
-              {session && (
+              {user && (
                 <div className="flex justify-between p-2">
                   <div className="flex space-x-4 ">
                     {hasLiked ? (
@@ -263,7 +270,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
                 </div>
               )}
 
-              {session && (
+              {user && (
                 <div className="w-[100%] h-auto bottom-0">
                   <form className="flex items-center flex-end p-2 max-h-[50px] border-b-gray-200 border-t-2">
                     <EmojiHappyIcon className="h-7" />

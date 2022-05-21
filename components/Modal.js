@@ -45,9 +45,9 @@ const Modal = () => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
 
-  let __selectedPost = selectedPost;
+  const { data: user } = useSession();
 
-  console.log(__selectedPost, "<< selected post in MODAL");
+  let __selectedPost = selectedPost;
 
   const {
     query: { id },
@@ -57,13 +57,11 @@ const Modal = () => {
     setHasLiked(likes.findIndex((like) => like.id === session?.uid) !== -1);
   }, [likes]);
 
-  console.log(likes, "<< likes");
-
   const likePost = async () => {
     if (hasLiked) {
-      await deleteDoc(doc(db, "posts", id, "likes", session.uid));
+      await deleteDoc(doc(db, "posts", id, "likes", session.user.userId));
     } else {
-      await setDoc(doc(db, "posts", id, "likes", session.uid), {
+      await setDoc(doc(db, "posts", id, "likes", session.user.userId), {
         username: session.user.username,
       });
     }
@@ -77,8 +75,8 @@ const Modal = () => {
 
     await addDoc(collection(db, "posts", id, "comments"), {
       comment: commentToSend,
-      username: session.username,
-      userImage: session.image,
+      username: session.user.username,
+      userImage: session.user.image,
       timestamp: serverTimestamp(),
     });
   };
@@ -89,12 +87,11 @@ const Modal = () => {
     setLoading(true);
 
     const docRef = await addDoc(collection(db, "posts"), {
-      username: session.username,
+      username: session.user.username,
       caption: captionRef.current.value,
-      profileImg: session.image,
+      profileImg: session.user.image,
       timestamp: serverTimestamp(),
     });
-    console.log("New doc added with ID", docRef.id);
 
     const imageRef = ref(storage, `posts/${docRef.id}/image`);
 
@@ -154,7 +151,7 @@ const Modal = () => {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            {id === session?.username ? (
+            {id === session?.user.username ? (
               <div className="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-[75%] mx-auto mb-[250px] md:mt-[30%] lg:mt-[10%] xl:my-[2%] xl:mr-[5%]">
                 <Post
                   id={__selectedPost?.id}
