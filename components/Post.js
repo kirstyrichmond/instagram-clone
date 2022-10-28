@@ -50,7 +50,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
   useEffect(() => {
     const userLiked = () => {
       const usersLiked = likes.map(user => user.data().username)
-        return usersLiked.includes(session.user.username)
+        return usersLiked.includes(session?.user.username)
     }
     setHasLiked(
       userLiked
