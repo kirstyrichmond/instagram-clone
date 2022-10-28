@@ -26,7 +26,6 @@ import {
   setDoc,
 } from "firebase/firestore";
 
-
 const Post = ({ id, username, userImg, img, caption }) => {
   const { data: session } = useSession();
   const [comment, setComment] = useState("");
@@ -49,9 +48,14 @@ const Post = ({ id, username, userImg, img, caption }) => {
   );
 
   useEffect(() => {
+    const userLiked = () => {
+      const usersLiked = likes.map(user => user.data().username)
+        return usersLiked.includes(session.user.username)
+    }
     setHasLiked(
-      likes.findIndex((like) => like.id === session?.user.uid) !== -1
-    );
+      userLiked
+    )
+    userLiked()
   }, [likes]);
 
   useEffect(
