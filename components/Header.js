@@ -12,7 +12,7 @@ import { HomeIcon } from "@heroicons/react/solid";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
-import { modalState } from "../atoms/modalAtom";
+import modalState from "../atoms/modalAtom";
 import Link from "next/link";
 
 const Header = () => {
@@ -68,13 +68,13 @@ const Header = () => {
               <Link
                 href={{
                   pathname: "/profile",
-                  query: { id: `${session.username}` },
+                  query: { id: `${session.user.username}` },
                 }}
                 passHref
               >
                 <a>
                   <Image
-                    src={session.image}
+                    src={session.user.image}
                     alt="profile pic"
                     className="rounded-full cursor-pointer"
                     width="30"

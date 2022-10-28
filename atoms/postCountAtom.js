@@ -1,6 +1,8 @@
 import { atom } from "recoil";
 
-export const postCountState = atom({
+const postCountState = atom({
   key: "postCountState",
   default: 0,
 });
+
+export default postCountState;

@@ -1,7 +1,9 @@
 import { atom } from "recoil";
 
-export const selectedPostState = atom({
+const selectedPostState = atom({
   key: "selectedPostState",
   default: null,
   dangerouslyAllowMutability: true,
 });
+
+export default selectedPostState;

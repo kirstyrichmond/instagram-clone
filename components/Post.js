@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { db } from "../firebase";
+import Moment from "react-moment";
+import { useRouter } from "next/router";
+import Image from "next/image";
+import EditPostModal from "./EditPostModal";
+import { HeartIcon as HeartIconFilled } from "@heroicons/react/solid";
+import { useSession } from "next-auth/react";
 import {
   BookmarkIcon,
   ChatIcon,
@@ -7,8 +14,6 @@ import {
   PaperAirplaneIcon,
   HeartIcon,
 } from "@heroicons/react/outline";
-import { HeartIcon as HeartIconFilled } from "@heroicons/react/solid";
-import { useSession } from "next-auth/react";
 import {
   addDoc,
   collection,
@@ -20,11 +25,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
-import { db } from "../firebase";
-import Moment from "react-moment";
-import { useRouter } from "next/router";
-import Image from "next/image";
-import { useRecoilValue } from "recoil";
+
 
 const Post = ({ id, username, userImg, img, caption }) => {
   const { data: session } = useSession();
@@ -32,6 +33,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
 
   useEffect(
@@ -47,7 +49,9 @@ const Post = ({ id, username, userImg, img, caption }) => {
   );
 
   useEffect(() => {
-    setHasLiked(likes.findIndex((like) => like.id === session?.uid) !== -1);
+    setHasLiked(
+      likes.findIndex((like) => like.id === session?.user.uid) !== -1
+    );
   }, [likes]);
 
   useEffect(
@@ -60,10 +64,10 @@ const Post = ({ id, username, userImg, img, caption }) => {
 
   const likePost = async () => {
     if (hasLiked) {
-      await deleteDoc(doc(db, "posts", id, "likes", session.username));
+      await deleteDoc(doc(db, "posts", id, "likes", session.user.username));
     } else {
-      await setDoc(doc(db, "posts", id, "likes", session.username), {
-        username: session.username,
+      await setDoc(doc(db, "posts", id, "likes", session.user.username), {
+        username: session.user.username,
       });
       setHasLiked(true);
     }
@@ -76,104 +80,104 @@ const Post = ({ id, username, userImg, img, caption }) => {
     setComment("");
 
     await addDoc(collection(db, "posts", id, "comments"), {
+      userId: session.user.id,
       comment: commentToSend,
-      username: session.username,
-      userImage: session.image,
+      username: session.user.username,
+      userImage: session.user.image,
       timestamp: serverTimestamp(),
     });
   };
 
   return router.pathname === "/" ? (
-    <div className={`bg-white lg:my-7 border rounded-sm`}>
-      {/* Header */}
-      <div className="flex items-center p-5">
-        <img
-          className="object-contain w-12 h-12 p-1 mr-3 border rounded-full"
-          src={userImg}
-          alt=""
-        />
-        <p className="flex-1 font-bold">{username}</p>
-        <DotsHorizontalIcon className="h-5" />
-      </div>
-
-      {/* Image */}
-      <img src={img} className="object-cover w-full" alt="" />
-
-      {/* Buttons */}
-      {session && (
-        <div className="flex justify-between px-4 pt-4">
-          <div className="flex space-x-4">
-            {hasLiked ? (
-              <HeartIconFilled
-                onClick={likePost}
-                className="text-red-500 btn"
-              />
-            ) : (
-              <HeartIcon onClick={likePost} className="btn" />
-            )}
-            <ChatIcon className="btn" />
-            <PaperAirplaneIcon className="btn" />
-          </div>
-          <BookmarkIcon className="btn" />
-        </div>
-      )}
-
-      {/* Caption */}
-      <div className="p-5 truncate">
-        {likes.length > 0 && (
-          <p className="mb-1 font-bold">{likes.length} likes</p>
-        )}
-        <span className="mr-1 font-bold">{username} </span>
-        {caption}
-      </div>
-
-      {/* Comments */}
-
-      {comments.length > 0 && (
-        <div className="h-20 ml-10 overflow-y-scroll break-all scrollbar-thumb-black scrollbar-thin">
-          {comments.map((comment) => (
-            <div key={comment.id} className="flex items-center mb-3 space-x-2">
-              <img
-                className="rounded-full h-7"
-                src={comment.data().userImage}
-                alt=""
-              />
-              <p className="flex-1 text-sm">
-                <span className="pr-2 font-bold">
-                  {comment.data().username}
-                </span>
-                {comment.data().comment}
-              </p>
-              <Moment fromNow className="pr-5 text-xs">
-                {comment.data().timestamp?.toDate()}
-              </Moment>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Input box */}
-      {session && (
-        <form className="flex items-center p-4">
-          <EmojiHappyIcon className="h-7" />
-          <input
-            type="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            className="flex-1 border-none outline-none focus:ring-0"
-            placeholder="Add a comment..."
+    <>
+      <EditPostModal id={id} isOpen={openModal} handleClose={setOpenModal} />
+      <div className={`bg-white lg:my-7 border rounded-sm`}>
+        <div className="flex items-center p-5 cursor-pointer">
+          <img
+            className="object-contain w-12 h-12 p-1 mr-3 border rounded-full"
+            src={userImg}
+            alt=""
           />
-          <button
-            type="submit"
-            disabled={!comment.trim()}
-            onClick={sendComment}
-            className="font-semibold text-blue-400"
-          >
-            Post
-          </button>
-        </form>
-      )}
-    </div>
+          <p className="flex-1 font-bold">{username}</p>
+          <DotsHorizontalIcon
+            className="h-5 cursor-pointer"
+            onClick={() =>
+              username === session.user.username && setOpenModal(true)
+            }
+          />
+        </div>
+        <img src={img} className="object-cover w-full" alt="" />
+        {session && (
+          <div className="flex justify-between px-4 pt-4">
+            <div className="flex space-x-4">
+              {hasLiked ? (
+                <HeartIconFilled
+                  onClick={likePost}
+                  className="text-red-500 btn"
+                />
+              ) : (
+                <HeartIcon onClick={likePost} className="btn" />
+              )}
+              <ChatIcon className="btn" />
+              <PaperAirplaneIcon className="btn" />
+            </div>
+            <BookmarkIcon className="btn" />
+          </div>
+        )}
+        <div className="p-5 truncate">
+          {likes.length > 0 && (
+            <p className="mb-1 font-bold">{likes.length} likes</p>
+          )}
+          <span className="mr-1 font-bold">{username} </span>
+          {caption}
+        </div>
+        {comments.length > 0 && (
+          <div className="h-20 ml-10 overflow-y-scroll break-all scrollbar-thumb-black scrollbar-thin">
+            {comments.map((comment) => (
+              <div
+                key={comment.id}
+                className="flex items-center mb-3 space-x-2"
+              >
+                <img
+                  className="rounded-full h-7"
+                  src={comment.data().userImage}
+                  alt=""
+                />
+                <p className="flex-1 text-sm">
+                  <span className="pr-2 font-bold">
+                    {comment.data().username}
+                  </span>
+                  {comment.data().comment}
+                </p>
+                <Moment fromNow className="pr-5 text-xs">
+                  {comment.data().timestamp?.toDate()}
+                </Moment>
+              </div>
+            ))}
+          </div>
+        )}
+        {session && (
+          <form className="flex items-center p-4">
+            <EmojiHappyIcon className="h-7" />
+            <input
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="flex-1 border-none outline-none focus:ring-0"
+              placeholder="Add a comment..."
+            />
+            <button
+              type="submit"
+              disabled={!comment.trim()}
+              onClick={sendComment}
+              className="font-semibold text-blue-400"
+            >
+              Post
+            </button>
+          </form>
+        )}
+      </div>
+    </>
   ) : (
     <div className="bg-white max-w-[100%] ">
       <div className="flex flex-col md:flex-row max-w-[100%]">

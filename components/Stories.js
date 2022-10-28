@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import faker from "@faker-js/faker";
-import Story from "./Story";
+import Story from "./Story.js";
 import { useSession } from "next-auth/react";
 
 const Stories = () => {
@@ -17,7 +17,9 @@ const Stories = () => {
 
   return (
     <div className="flex p-6 space-x-2 overflow-x-scroll">
-      {session && <Story img={session.image} username={session.username} />}
+      {session && (
+        <Story img={session.user.image} username={session.user.username} />
+      )}
       {suggestions.map((profile) => (
         <Story
           key={profile.id}

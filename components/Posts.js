@@ -1,26 +1,19 @@
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
-import Post from "./Post";
-import { useRouter } from "next/router";
+import Post from "./Post.js";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { postCountState } from "../atoms/postCountAtom";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { modalState } from "../atoms/modalAtom";
-import { selectedPostState } from "../atoms/selectedPostAtom";
+import postCountState from "../atoms/postCountAtom";
+import { useSetRecoilState } from "recoil";
+import selectedPostState from "../atoms/selectedPostAtom";
 
-const Posts = () => {
+const Posts = ({ profilePage }) => {
   const [userPosts, setUserPosts] = useState([]);
   const setProfilePosts = useSetRecoilState(postCountState);
   const setSelectedPost = useSetRecoilState(selectedPostState);
-  const router = useRouter();
   const { data: session } = useSession();
-  const {
-    query: { id },
-  } = router;
 
-  console.log(id, "<< path");
 
   useEffect(
     () =>
@@ -35,7 +28,7 @@ const Posts = () => {
 
   const profilePosts = userPosts
     .map((post) => {
-      if (session?.username === post.data().username) {
+      if (session?.user.username === post.data().username) {
         return (
           <div
             key={post.id}
@@ -64,6 +57,7 @@ const Posts = () => {
       <Post
         id={post.id}
         username={post.data().username}
+        name={post.data().name}
         userImg={post.data().profileImg}
         img={post.data().image}
         caption={post.data().caption}
@@ -73,7 +67,7 @@ const Posts = () => {
     </div>
   ));
 
-  return id === session?.username ? (
+  return profilePage ? (
     <div className="flex flex-wrap justify-between px-2">{profilePosts}</div>
   ) : (
     <div>{feedPosts}</div>

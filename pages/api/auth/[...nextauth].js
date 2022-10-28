@@ -1,23 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import { FirestoreAdapter } from "@next-auth/firebase-adapter"
 import EmailProvider from "next-auth/providers/email";
-import { FirebaseAdapter } from "@next-auth/firebase-adapter";
-import { initializeApp, getApp, getApps } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  query,
-  getDocs,
-  where,
-  limit,
-  doc,
-  getDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  runTransaction,
-} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBRSYqBVUTpXMuYfzu0fezhAi08fnGcEg0",
@@ -28,29 +13,12 @@ const firebaseConfig = {
   appId: "1:834479094225:web:6558c66d2d9140bc1f88f0",
 };
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const db = getFirestore();
-
-export default NextAuth({
-  // Configure one or more authentication providers
-  adapter: FirebaseAdapter({
-    db,
-    collection,
-    query,
-    getDocs,
-    where,
-    limit,
-    doc,
-    getDoc,
-    addDoc,
-    updateDoc,
-    deleteDoc,
-    runTransaction,
-  }),
-  providers: [
+const authOptions = {
+    providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
@@ -67,34 +35,35 @@ export default NextAuth({
       },
       from: process.env.EMAIL_FROM,
     }),
-
-    // ...add more providers here
   ],
-  // pages: {
-  //   signIn: "/auth/signin",
-  // },
+  adapter: FirestoreAdapter(firebaseConfig),
+  pages: {
+    signIn: "/auth/signin",
+  },
   callbacks: {
     async session({ session, token, user }) {
+      console.log({user, session, token});
+
       if (session.user.name) {
-        user.username = session.user.name
+        session.user.username = session.user.name
           .split(" ")
           .join("")
           .toLocaleLowerCase();
       } else {
-        user.username = session.user.email.split("@")[0];
+        session.user.username = session.user.email.split("@")[0];
       }
       session.user.image
-        ? (user.image = session.user.image)
-        : (user.image =
+        ? (session.user.image = session.user.image)
+        : (session.user.image =
             "https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png");
 
-      return {
-        name: user.name,
-        email: user.email,
-        username: user.username,
-        image: user.image,
-      };
+      session.user.id = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
+
+
+      return session;
     },
   },
-  secret: process.env.SECRET,
-});
+  secret: process.env.NEXTAUTH_SECRET,
+};
+
+export default NextAuth(authOptions);

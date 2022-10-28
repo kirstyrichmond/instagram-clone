@@ -1,15 +1,9 @@
 import React, { Fragment, useRef, useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { modalState } from "../atoms/modalAtom";
+import modalState from "../atoms/modalAtom.js";
 import { Dialog, Transition } from "@headlessui/react";
 import {
-  BookmarkIcon,
   CameraIcon,
-  ChatIcon,
-  DotsHorizontalIcon,
-  EmojiHappyIcon,
-  HeartIcon,
-  PaperAirplaneIcon,
 } from "@heroicons/react/outline";
 import { db, storage } from "../firebase";
 import {
@@ -22,13 +16,9 @@ import {
 } from "firebase/firestore";
 import { ref, getDownloadURL, uploadString } from "firebase/storage";
 import { useSession } from "next-auth/react";
-import { selectedPostState } from "../atoms/selectedPostAtom";
+import selectedPostState from "../atoms/selectedPostAtom.js";
 import { useRouter } from "next/router";
-import Post from "./Post";
-import Posts from "./Posts";
-import { HeartIcon as HeartIconFilled } from "@heroicons/react/solid";
-import Moment from "react-moment";
-import Image from "next/image";
+import Post from "./Post.js";
 
 const Modal = () => {
   const { data: session } = useSession();
@@ -47,8 +37,6 @@ const Modal = () => {
 
   let __selectedPost = selectedPost;
 
-  console.log(__selectedPost, "<< selected post in MODAL");
-
   const {
     query: { id },
   } = router;
@@ -56,8 +44,6 @@ const Modal = () => {
   useEffect(() => {
     setHasLiked(likes.findIndex((like) => like.id === session?.uid) !== -1);
   }, [likes]);
-
-  console.log(likes, "<< likes");
 
   const likePost = async () => {
     if (hasLiked) {
@@ -89,9 +75,10 @@ const Modal = () => {
     setLoading(true);
 
     const docRef = await addDoc(collection(db, "posts"), {
-      username: session.username,
+      userId: session.user.id,
+      username: session.user.username,
       caption: captionRef.current.value,
-      profileImg: session.image,
+      profileImg: session.user.image,
       timestamp: serverTimestamp(),
     });
     console.log("New doc added with ID", docRef.id);
@@ -154,7 +141,7 @@ const Modal = () => {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            {id === session?.username ? (
+            {id === session?.user.username ? (
               <div className="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-[75%] mx-auto mb-[250px] md:mt-[30%] lg:mt-[10%] xl:my-[2%] xl:mr-[5%]">
                 <Post
                   id={__selectedPost?.id}
