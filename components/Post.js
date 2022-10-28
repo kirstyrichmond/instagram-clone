@@ -3,7 +3,6 @@ import { db } from "../firebase";
 import Moment from "react-moment";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import EditPostModal from "./EditPostModal";
 import { HeartIcon as HeartIconFilled } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
 import {
@@ -25,6 +24,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
+import ModalWrapper from "./Modal";
 
 const Post = ({ id, username, userImg, img, caption }) => {
   const { data: session } = useSession();
@@ -49,13 +49,11 @@ const Post = ({ id, username, userImg, img, caption }) => {
 
   useEffect(() => {
     const userLiked = () => {
-      const usersLiked = likes.map(user => user.data().username)
-        return usersLiked.includes(session?.user.username)
-    }
-    setHasLiked(
-      userLiked
-    )
-    userLiked()
+      const usersLiked = likes.map((user) => user.data().username);
+      return usersLiked.includes(session?.user.username);
+    };
+    setHasLiked(userLiked);
+    userLiked();
   }, [likes]);
 
   useEffect(
@@ -92,9 +90,19 @@ const Post = ({ id, username, userImg, img, caption }) => {
     });
   };
 
+  const deletePost = async () => {
+    await deleteDoc(doc(db, "posts", id));
+    setOpenModal(false);
+  };
+
   return router.pathname === "/" ? (
     <>
-      <EditPostModal id={id} isOpen={openModal} handleClose={setOpenModal} />
+      <ModalWrapper
+        title={"Delete Post"}
+        action={deletePost}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
       <div className={`bg-white lg:my-7 border rounded-sm`}>
         <div className="flex items-center p-5 cursor-pointer">
           <img
@@ -204,7 +212,12 @@ const Post = ({ id, username, userImg, img, caption }) => {
                 alt=""
               />
               <p className="flex-1 text-xs font-semibold">{username}</p>
-              <DotsHorizontalIcon className="h-5" />
+              <DotsHorizontalIcon
+                className="h-5 cursor-pointer"
+                onClick={() =>
+                  username === session.user.username && setOpenModal(true)
+                }
+              />
             </div>
           </div>
 

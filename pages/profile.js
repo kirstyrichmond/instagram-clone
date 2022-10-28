@@ -1,27 +1,32 @@
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useRecoilState, useRecoilValue } from "recoil";
-import modalState from "../atoms/modalAtom";
+import { useRecoilValue } from "recoil";
 import postCountState from "../atoms/postCountAtom";
 import Header from "../components/Header";
 import Posts from "../components/Posts";
 import Modal from "../components/Modal";
 import { MdSettings } from "react-icons/md";
-import AccountModal from "../components/AccountModal";
+import ModalWrapper from "../components/Modal";
+import PostModal from "../components/PostModal";
 
 const Profile = () => {
   const { data: session } = useSession();
   const postCount = useRecoilValue(postCountState);
-  const [open, setOpen] = useRecoilState(modalState);
-  const [openAccountModal, setOpenAccountModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [openPostModal, setOpenPostModal] = useState(false);
 
   return (
     <div>
-      <AccountModal
-        id={session?.user.id}
-        isOpen={openAccountModal}
-        handleClose={setOpenAccountModal}
+      <ModalWrapper
+        title={"Delete Account"}
+        action={""}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
+      <PostModal
+        openPostModal={openPostModal}
+        setOpenPostModal={setOpenPostModal}
       />
 
       <Header />
@@ -42,7 +47,7 @@ const Profile = () => {
                 {session?.user.username}
               </h2>
               <MdSettings
-                onClick={() => setOpenAccountModal(true)}
+                onClick={() => setOpenModal(true)}
                 className="text-[22px] cursor-pointer"
               />
             </div>
@@ -60,7 +65,10 @@ const Profile = () => {
           ) : (
             <> */}
           <p className="pb-5 text-center text-md">POSTS</p>
-          <div className="cursor-pointer" onClick={() => setOpen(!open)}>
+          <div
+            className="cursor-pointer"
+            onClick={() => setOpenPostModal(true)}
+          >
             <Posts profilePage={true} className="" />
           </div>
           {/* </>

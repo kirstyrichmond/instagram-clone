@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import modalState from "../atoms/modalAtom";
 import Link from "next/link";
+import AddPostModal from './AddPostModal';
 
 const Header = () => {
   const { data: session } = useSession();
@@ -21,6 +22,8 @@ const Header = () => {
   const router = useRouter();
 
   return (
+    <>
+    <AddPostModal />
     <div className="sticky top-0 z-40 bg-white border-b shadow-sm">
       <div className="flex justify-between max-w-4xl mx-5 md:mx-auto">
         <div
@@ -89,6 +92,7 @@ const Header = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
