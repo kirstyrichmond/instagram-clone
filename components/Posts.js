@@ -14,7 +14,6 @@ const Posts = ({ profilePage }) => {
   const setSelectedPost = useSetRecoilState(selectedPostState);
   const { data: session } = useSession();
 
-
   useEffect(
     () =>
       onSnapshot(
@@ -53,7 +52,7 @@ const Posts = ({ profilePage }) => {
   setProfilePosts(profilePosts.length);
 
   const feedPosts = userPosts.map((post) => (
-    <div key={post.id} className="p-5">
+    <div key={post.id} className="p-0 md:p-5">
       <Post
         id={post.id}
         username={post.data().username}

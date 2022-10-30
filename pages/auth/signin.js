@@ -8,16 +8,16 @@ const signin = ({ providers }) => {
     <>
       <Header />
       <div className="">
-        <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-56 text-center px-14">
+        <div className="flex flex-col items-center justify-center py-2 text-center px-14 mt-[132px] sm:mt-[268px]">
           <img
-            className="object-contain w-auto"
+            className="object-contain w-44"
             src="https://www.instagram.com/static/images/web/mobile_nav_type_logo-2x.png/1b47f9d0e595.png"
             alt=""
           />
-          <p className="italic font-xs">
+          {/* <p className="italic font-xs">
             This is not a REAL app, it has been built for learning purposes
             only.
-          </p>
+          </p> */}
           {/* <p className="mb-12 font-bold text-8xl">Happening now</p>
           <p className="text-4xl font-semibold">Join Instagram today.</p> */}
           {/* <div>
@@ -28,7 +28,7 @@ const signin = ({ providers }) => {
            </form>
             
           </div> */}
-          <div className="mt-40">
+          <div className="mt-12">
             {/* {Object.values(providers).map((provider) => (
               <div key={provider.name}>
                 <button
@@ -40,10 +40,10 @@ const signin = ({ providers }) => {
               </div>
             ))} */}
             <div
-              className="flex gap-4 bg-white p-2 px-14 items-center rounded-[50px] cursor-pointer text-lg border-2 border-gray"
+              className="flex gap-4 bg-white p-2 px-4 items-center rounded-[8px] cursor-pointer text-lg border-2 border-gray"
               onClick={() => signIn("google", { callbackUrl: "/" })}
             >
-              <FcGoogle className="text-[36px]" />
+              <FcGoogle className="text-[26px]" />
               Sign in with Google
             </div>
             {/* <div

@@ -103,18 +103,18 @@ const Post = ({ id, username, userImg, img, caption }) => {
         openModal={openModal}
         setOpenModal={setOpenModal}
       />
-      <div className={`bg-white lg:my-7 border rounded-sm`}>
-        <div className="flex items-center p-5 cursor-pointer">
+      <div className={`bg-white lg:my-7 border-t md-border rounded-sm`}>
+        <div className="flex items-center py-2 pl-2 pr-4 cursor-pointer md:py-3">
           <img
             className="object-contain w-12 h-12 p-1 mr-3 border rounded-full"
             src={userImg}
             alt=""
           />
-          <p className="flex-1 font-bold">{username}</p>
+          <p className="flex-1 font-semibold">{username}</p>
           <DotsHorizontalIcon
             className="h-5 cursor-pointer"
             onClick={() =>
-              username === session.user.username && setOpenModal(true)
+              username === session?.user.username && setOpenModal(true)
             }
           />
         </div>
@@ -136,15 +136,17 @@ const Post = ({ id, username, userImg, img, caption }) => {
             <BookmarkIcon className="btn" />
           </div>
         )}
-        <div className="p-5 truncate">
+        <div className="p-3 truncate md:p-5">
           {likes.length > 0 && (
-            <p className="mb-1 font-bold">{likes.length} likes</p>
+            <p className="mb-1 font-bold">
+              {likes.length} {likes.length === 1 ? "like" : "likes"}
+            </p>
           )}
           <span className="mr-1 font-bold">{username} </span>
           {caption}
         </div>
         {comments.length > 0 && (
-          <div className="h-20 ml-10 overflow-y-scroll break-all scrollbar-thumb-black scrollbar-thin">
+          <div className="h-20 ml-6 overflow-y-scroll break-all scrollbar-thumb-black scrollbar-thin">
             {comments.map((comment) => (
               <div
                 key={comment.id}
@@ -155,8 +157,8 @@ const Post = ({ id, username, userImg, img, caption }) => {
                   src={comment.data().userImage}
                   alt=""
                 />
-                <p className="flex-1 text-sm">
-                  <span className="pr-2 font-bold">
+                <p className="flex flex-col flex-1 text-sm">
+                  <span className="pr-2 font-semibold">
                     {comment.data().username}
                   </span>
                   {comment.data().comment}
@@ -192,13 +194,13 @@ const Post = ({ id, username, userImg, img, caption }) => {
     </>
   ) : (
     <div className="bg-white max-w-[100%] ">
-      <div className="flex flex-col md:flex-row max-w-[100%]">
+      <div className="flex flex-col lg:flex-row max-w-[100%]">
         <div className="w-full bg-black max-h-[900px] max-w-[850px]">
           <Image
             src={img}
             className="object-contain"
             width={100}
-            height={100}
+            height={80}
             layout="responsive"
             alt=""
           />
@@ -235,7 +237,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
                       alt=""
                     />
                     <p className="pr-5 text-xs break-all">
-                      <span className="pr-2 font-semibold">
+                      <span className="flex-1 pr-2 font-semibold">
                         {comment.data().username}
                       </span>
                       {comment.data().comment}

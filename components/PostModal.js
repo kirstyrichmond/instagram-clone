@@ -16,7 +16,8 @@ const customStyles = {
     borderRadius: "12px",
     border: "none",
     zIndex: "100",
-    width: "50%",
+    width: "84vw",
+    height: "80%",
   },
   overlay: {
     backgroundColor: "rgb(27 26 26 / 70%)",

@@ -14,25 +14,6 @@ import { ref, getDownloadURL, uploadString } from "firebase/storage";
 import { useSession } from "next-auth/react";
 import Modal from "react-modal";
 
-const customStyles = {
-  content: {
-    top: "54%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    padding: "0",
-    borderRadius: "12px",
-    border: "none",
-    zIndex: "100",
-    width: "400px",
-  },
-  overlay: {
-    backgroundColor: "rgb(27 26 26 / 70%)",
-  },
-};
-
 const AddPostModal = () => {
   const { data: session } = useSession();
   const [openModal, setOpenModal] = useRecoilState(modalState);
@@ -40,6 +21,25 @@ const AddPostModal = () => {
   const filePickerRef = useRef(null);
   const captionRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
+
+  const customStyles = {
+    content: {
+      top: "54%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      padding: "0",
+      borderRadius: "12px",
+      border: "none",
+      zIndex: "100",
+      width: "300px",
+    },
+    overlay: {
+      backgroundColor: "rgb(27 26 26 / 70%)",
+    },
+  };
 
   const uploadPost = async () => {
     if (loading) return;
@@ -120,7 +120,7 @@ const AddPostModal = () => {
           <>
             <div
               onClick={() => filePickerRef.current.click()}
-              className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full cursor-pointer max-w-"
+              className="flex items-center justify-center w-12 h-12 mx-auto mt-3 bg-red-100 rounded-full cursor-pointer"
             >
               <CameraIcon className="w-6 h-6 text-red-600" aria-hidden="true" />
             </div>

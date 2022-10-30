@@ -25,7 +25,6 @@ const Profile = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openPostModal, setOpenPostModal] = useState(false);
 
-
   const deleteAccount = async () => {
     const q = query(
       collection(db, "posts"),
@@ -47,6 +46,7 @@ const Profile = () => {
     <div>
       <ModalWrapper
         title={"Delete Account"}
+        secondTitle={"Sign Out"}
         action={deleteAccount}
         openModal={openModal}
         setOpenModal={setOpenModal}
@@ -59,7 +59,7 @@ const Profile = () => {
       <Header />
       <main className="grid grid-cols-1 mx-auto my-8 md:max-w-3xl xl:max-w-4xl">
         <Modal />
-        <section className="grid grid-cols-3 h-80">
+        <section className="grid grid-cols-3 h-36 md:h-56 lg:h-72">
           <div className="relative w-24 h-24 col-span-1 mx-auto lg:w-48 lg:h-48 md:w-40 md:h-40 sm:w-28 sm:h-28">
             <Image
               src={session?.user.image}
@@ -69,21 +69,21 @@ const Profile = () => {
             />
           </div>
           <div className="col-span-2">
-            <div className="flex items-center content-center h-10 mb-6 align-middle">
-              <h2 className="mr-6 text-3xl font-light ">
+            <div className="flex items-center content-center h-10 mb-2 align-middle md:mb-6">
+              <h2 className="mr-4 text-2xl font-light md:text-3xl ">
                 {session?.user.username}
               </h2>
               <MdSettings
                 onClick={() => setOpenModal(true)}
-                className="text-[22px] cursor-pointer"
+                className="text-[18px] md:text-[22px] cursor-pointer"
               />
             </div>
-            <div className="flex justify-between mb-8">
-              <p className="text-lg">{postCount} posts</p>
-              <p className="text-lg">0 followers</p>
-              <p className="text-lg">0 following</p>
+            <div className="flex justify-between mb-4 w-[80%]">
+              <p className="text-sm text-center md:text-lg">{postCount} posts</p>
+              <p className="text-sm text-center md:text-lg">0 followers</p>
+              <p className="text-sm text-center md:text-lg">0 following</p>
             </div>
-            <h2 className="mb-5 text-xl font-medium">{session?.user.name}</h2>
+            {/* <h2 className="mb-5 text-lg font-medium">{session?.user.name}</h2> */}
           </div>
         </section>
         <section className="">
