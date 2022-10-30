@@ -3,7 +3,7 @@ import Header from "../components/Header.js";
 import Feed from "../components/Feed.js";
 import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
-import db from "../firebase.js";
+import { db } from "../firebase.js";
 
 function Home() {
   const { data: session } = useSession();
