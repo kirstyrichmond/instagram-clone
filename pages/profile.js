@@ -9,6 +9,15 @@ import Modal from "../components/Modal";
 import { MdSettings } from "react-icons/md";
 import ModalWrapper from "../components/Modal";
 import PostModal from "../components/PostModal";
+import {
+  deleteDoc,
+  doc,
+  query,
+  collection,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { db } from "../firebase";
 
 const Profile = () => {
   const { data: session } = useSession();
@@ -16,11 +25,29 @@ const Profile = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openPostModal, setOpenPostModal] = useState(false);
 
+
+  const deleteAccount = async () => {
+    const q = query(
+      collection(db, "posts"),
+      where("userId", "==", "u5MEqzI7GdDgkBZZzRrG")
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((post) => {
+      deleteDoc(doc(db, "posts", post.id));
+    });
+
+    deleteDoc(doc(db, "users", session.user.id));
+    setOpenModal(false);
+    window.location.href = "/";
+  };
+
   return (
     <div>
       <ModalWrapper
         title={"Delete Account"}
-        action={""}
+        action={deleteAccount}
         openModal={openModal}
         setOpenModal={setOpenModal}
       />

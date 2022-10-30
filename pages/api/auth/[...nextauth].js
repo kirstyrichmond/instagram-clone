@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
-import { FirestoreAdapter } from "@next-auth/firebase-adapter"
+import { FirestoreAdapter } from "@next-auth/firebase-adapter";
 import EmailProvider from "next-auth/providers/email";
 
 const firebaseConfig = {
@@ -14,11 +14,10 @@ const firebaseConfig = {
 };
 
 const authOptions = {
-    providers: [
+  providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
@@ -42,7 +41,7 @@ const authOptions = {
   },
   callbacks: {
     async session({ session, token, user }) {
-      console.log({user, session, token});
+      console.log({ user, session, token });
 
       if (session.user.name) {
         session.user.username = session.user.name
@@ -57,8 +56,7 @@ const authOptions = {
         : (session.user.image =
             "https://villagesonmacarthur.com/wp-content/uploads/2020/12/Blank-Avatar.png");
 
-      session.user.id = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))
-
+      session.user.id = user.id;
 
       return session;
     },

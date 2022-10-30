@@ -64,7 +64,7 @@ const AddPostModal = () => {
         image: downloadURL,
       });
     });
-    setOpen(false);
+    setOpenModal(false);
     setLoading(false);
     setSelectedFile(null);
   };

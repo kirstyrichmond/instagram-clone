@@ -1,31 +1,27 @@
 import Head from "next/head";
 import Header from "../components/Header.js";
 import Feed from "../components/Feed.js";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import db from "../firebase.js";
-
 
 function Home() {
   const { data: session } = useSession();
 
   useEffect(() => {
     const createUser = async () => {
-      if(session) {
-        console.log("is sessions...")
-      const docRef = await db
-      .collection("users")
-      .doc(session.user.id, {
-        name: session.user.name,
-        email: session.user.email,
-        image: session.user.image,
-        id: session.user.id
-      })
-      return docRef
-    }
-    createUser()
-  }
-}, [])
+      if (session) {
+        const docRef = await db.collection("users").doc(session.user.id, {
+          name: session.user.name,
+          email: session.user.email,
+          image: session.user.image,
+          id: session.user.id,
+        });
+        return docRef;
+      }
+      createUser();
+    };
+  }, []);
 
   return (
     <div className="">
