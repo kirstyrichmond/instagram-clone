@@ -103,7 +103,7 @@ const Post = ({ id, username, userImg, img, caption }) => {
         openModal={openModal}
         setOpenModal={setOpenModal}
       />
-      <div className={`bg-white lg:my-7 border-t md-border rounded-sm`}>
+      <div className={`bg-white lg:mt-1 border-t md-border rounded-sm`}>
         <div className="flex items-center py-2 pl-2 pr-4 cursor-pointer md:py-3">
           <img
             className="object-contain w-12 h-12 p-1 mr-3 border rounded-full"

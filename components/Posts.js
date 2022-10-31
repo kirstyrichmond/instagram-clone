@@ -52,7 +52,7 @@ const Posts = ({ profilePage }) => {
   setProfilePosts(profilePosts.length);
 
   const feedPosts = userPosts.map((post) => (
-    <div key={post.id} className="p-0 md:p-5">
+    <div key={post.id} className="p-0 md:p-5 lg:p-2">
       <Post
         id={post.id}
         username={post.data().username}

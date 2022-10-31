@@ -28,7 +28,12 @@ const Header = () => {
       <div className="sticky top-0 z-40 pt-3 pb-2 bg-white border-b shadow-sm">
         <div className="flex justify-between max-w-4xl ml-2 mr-4 md:mx-auto min-[1280px]:mx-auto">
           <div className="flex">
-            {session && <HiOutlineCamera onClick={() => setOpen(true)} className="mr-1 w-7 h-7 sm:hidden" />}
+            {session && (
+              <HiOutlineCamera
+                onClick={() => setOpen(true)}
+                className="mr-1 w-7 h-7 sm:hidden"
+              />
+            )}
 
             <div
               onClick={() => router.push("/")}
@@ -43,7 +48,7 @@ const Header = () => {
               />
             </div>
           </div>
-
+          {/* 
           <div className="hidden max-w-xs lg:flex">
             <div className="relative rounded-md">
               <div className="absolute inset-y-0 flex items-center pl-3 pointer-events-none">
@@ -55,13 +60,13 @@ const Header = () => {
                 placeholder="Search"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="flex items-center justify-end space-x-5 md:mr-4">
             {session ? (
               <>
-              <HomeIcon onClick={() => router.push("/")} className="navBtn" />
-              {/* <MenuIcon className="w-8 h-8 cursor-pointer md:hidden" /> */}
+                <HomeIcon onClick={() => router.push("/")} className="navBtn" />
+                {/* <MenuIcon className="w-8 h-8 cursor-pointer md:hidden" /> */}
                 {/* <div className="relative">
                   <PaperAirplaneIcon className="rotate-45 navBtn" />
                 </div> */}
