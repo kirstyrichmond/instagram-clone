@@ -18,6 +18,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import { signOut } from "next-auth/react";
 
 const Profile = () => {
   const { data: session } = useSession();
@@ -38,8 +39,10 @@ const Profile = () => {
     });
 
     deleteDoc(doc(db, "users", session.user.id));
+
+    signOut({ redirect: true, callbackUrl: process.env.NEXTAUTH_URL });
+
     setOpenModal(false);
-    window.location.href = "/";
   };
 
   return (
@@ -79,7 +82,9 @@ const Profile = () => {
               />
             </div>
             <div className="flex justify-between mb-4 w-[80%]">
-              <p className="text-sm text-center md:text-lg">{postCount} posts</p>
+              <p className="text-sm text-center md:text-lg">
+                {postCount} posts
+              </p>
               <p className="text-sm text-center md:text-lg">0 followers</p>
               <p className="text-sm text-center md:text-lg">0 following</p>
             </div>

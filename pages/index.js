@@ -18,7 +18,7 @@ function Home() {
           id: session.user.id,
         });
         return docRef;
-      }
+      } 
       createUser();
     };
   }, []);

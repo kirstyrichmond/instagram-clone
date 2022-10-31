@@ -20,31 +20,37 @@ const customStyles = {
   },
 };
 
-const ModalWrapper = ({ title, action, openModal, setOpenModal, secondTitle }) => {
-
-    const handleSignout = () => {
-        signOut()
-        window.location.href = "/";
-    }
-
-    return (
-  <Modal
-    isOpen={openModal}
-    onRequestClose={() => setOpenModal(false)}
-    ariaHideApp={false}
-    style={customStyles}
-    contentLabel={title}
-    shouldCloseOnOverlayClick
-  >
-    <div className="px-10 py-5 bg-white cursor-pointer" onClick={action}>
-      <h3 className="text-lg text-center">{title}</h3>
-    </div>
-    {secondTitle && (
-        <div className="px-6 py-4 mx-4 bg-white border-t cursor-pointer" onClick={handleSignout}>
-            <h3 className="text-lg text-center">{secondTitle}</h3>
+const ModalWrapper = ({
+  title,
+  action,
+  openModal,
+  setOpenModal,
+  secondTitle,
+}) => {
+  return (
+    <Modal
+      isOpen={openModal}
+      onRequestClose={() => setOpenModal(false)}
+      ariaHideApp={false}
+      style={customStyles}
+      contentLabel={title}
+      shouldCloseOnOverlayClick
+    >
+      <div className="px-10 py-5 bg-white cursor-pointer" onClick={action}>
+        <h3 className="text-lg text-center">{title}</h3>
+      </div>
+      {secondTitle && (
+        <div
+          className="px-6 py-4 mx-4 bg-white border-t cursor-pointer"
+          onClick={() =>
+            signOut({ redirect: true, callbackUrl: process.env.NEXTAUTH_URL })
+          }
+        >
+          <h3 className="text-lg text-center">{secondTitle}</h3>
         </div>
-    )}
-  </Modal>
-    )};
+      )}
+    </Modal>
+  );
+};
 
 export default ModalWrapper;

@@ -58,10 +58,10 @@ const Header = () => {
           </div>
 
           <div className="flex items-center justify-end space-x-5 md:mr-4">
-            <HomeIcon onClick={() => router.push("/")} className="navBtn" />
-            {/* <MenuIcon className="w-8 h-8 cursor-pointer md:hidden" /> */}
             {session ? (
               <>
+              <HomeIcon onClick={() => router.push("/")} className="navBtn" />
+              {/* <MenuIcon className="w-8 h-8 cursor-pointer md:hidden" /> */}
                 {/* <div className="relative">
                   <PaperAirplaneIcon className="rotate-45 navBtn" />
                 </div> */}
