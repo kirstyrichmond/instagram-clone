@@ -40,7 +40,10 @@ const Profile = () => {
 
     deleteDoc(doc(db, "users", session.user.id));
 
-    signOut({ redirect: true, callbackUrl: process.env.NEXTAUTH_URL });
+    signOut({
+      redirect: true,
+      callbackUrl: "https://instagram-clone-nine-delta.vercel.app/",
+    });
 
     setOpenModal(false);
   };

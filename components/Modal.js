@@ -43,7 +43,10 @@ const ModalWrapper = ({
         <div
           className="px-6 py-4 mx-4 bg-white border-t cursor-pointer"
           onClick={() =>
-            signOut({ redirect: true, callbackUrl: process.env.NEXTAUTH_URL })
+            signOut({
+              redirect: true,
+              callbackUrl: "https://instagram-clone-nine-delta.vercel.app/",
+            })
           }
         >
           <h3 className="text-lg text-center">{secondTitle}</h3>
